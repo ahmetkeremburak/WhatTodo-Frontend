@@ -1,25 +1,34 @@
-import logo from './logo.svg';
+//import logo from './logo.svg';
 import './App.css';
+import { Fragment, useEffect, useState } from 'react'
+import TodoItem from './components/todoItem';
 
 function App() {
+  const [todoItems, setTodoItems] = useState(null)
+   
+  useEffect(() => {
+    //does smt on load
+    console.log("Locked and loaded, bozz");
+    fetch("http://localhost:8080/api/todoItems")
+    .then((response) => response.json())
+    .then((data) => {
+      console.log("Todo Items list: ", data)
+      setTodoItems(data)
+    })
+  })
+  
+  
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+    <>
+      {todoItems ? todoItems.map((todoItem) =>  
+      {
+        return (
+        <TodoItem data={todoItem} key={todoItem.id}/>
+        )
+      }) 
+      : "loading null"}
+    </>
+  )
 }
 
-export default App;
+export default App
